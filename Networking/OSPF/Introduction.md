@@ -8,5 +8,7 @@ Body:
 Conclusion:
   -
 Reference:
-  -![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
+  -
 
+
+#To add images: ![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
