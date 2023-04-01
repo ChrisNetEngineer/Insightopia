@@ -1,0 +1,17 @@
+aptitude install snmpd snmp
+
+vim /etc/snmp/snmpd.conf
+
+#change the following
+agentaddress udp:161
+#comment out 
+#rocommunity public default -V systemonly
+#rocommuniyv6 public default -V systemonly
+
+#add
+rocommunity public 192.168.2.0/24
+
+systemctl restart snmpd
+
+to test
+snmpwalk

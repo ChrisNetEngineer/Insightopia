@@ -1,0 +1,18 @@
+aptitude install cacti libphp-phpmailer php-snmp libjs-jquery-ui-theme-smoothness
+
+
+# select yes, config with dbconfig-common
+# password Skill39
+# configure with apache2 webserver
+
+systemctl restart apache2
+systecmtl restart mysql
+
+#go to intclnt.wsc2022.kr
+
+testing commands
+#test intsrv
+snmpwalk -v2c -c public 192.168.1.1 1.3.6.1.2.1.1
+
+#test fr-dc aft being natted
+snmpwalk -v2c -c public 210.103.5.65 1.3.6.1.2.1.1

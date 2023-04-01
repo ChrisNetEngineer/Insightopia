@@ -1,0 +1,42 @@
+aptitude install vsftpd libnss-ldapd libpam-ldapd ldap-utils
+nano /etc/vsftpd.conf
+
+vim /etc/vsftpd.conf
+	write_enable=YES
+	ascii_upload_enable=YES
+	ascii_download_enable=YES
+	chroot_local_user=YES
+  
+	pam_service_name=vsftpd.ldap
+	
+	ls_recurse_enable=YES
+	local_root=/var/www/html #require apache2 to be done first (chmod 777 /var/www/html)
+	seccomp_sandbox=NO
+	allow_writeable_chroot=YES
+	
+nano /etc/pam.d/vsftpd.ldap
+
+	#%PAM-1.0
+	auth required pam_ldap.so
+	account required pam_ldap.so
+	session required pam_ldap.so
+	password required pam_ldap.so
+	session required    pam_mkhomedir.so    skel=/etc/skel umask=077
+
+nano /etc/pam.d/common-session
+	session optional        pam_mkhomedir.so skel=/etc/skel umask=077
+
+systemctl restart nscd nslcd vsftpd
+
+#testing purposes go to intclient
+touch hihihi
+ftp 192.168.2.1
+#username james
+#password skill39
+put hihihi
+cd /root
+
+#expected result
+#sign in successful
+#transfer completed
+#user jailed

@@ -1,0 +1,79 @@
+aptitude install isc-dhcp-server ntp openssh-server openssh-client bind9 bind9-utils
+nano /etc/resolv.conf
+nameserver 192.168.2.1
+domain wsc2022.kr
+search wsc2022.kr
+
+nano /etc/ntp.conf
+	#comment out all the pools and add
+	pool dmzsrv.wsc2022.kr iburst
+	server 127.127.1.0
+	fudge 127.127.1.0 stratum 13
+	
+	systemctl restart ntp
+	ntpq -p #verify if it works
+
+nano /etc/ssh/sshd_config
+	#line 34 uncomment and change
+	PermitRootLogin yes
+	
+	systemctl restart ssh
+	sftp 192.168.2.1
+	get /etc/bind/ddns.key
+
+sftp 192.168.2.1
+exit
+cp ddns.key /etc/bind/ddns.key
+
+nano /etc/default/isc-dhcp-server
+	# line 4 : uncomment
+	DHCPDv4_CONF=/etc/dhcp/dhcpd.conf
+	# 1line 17,18 : specify interface to listen (replace it to your environment)
+	INTERFACESv4="ens192"
+
+nano /etc/dhcp/dhcpd.conf
+	#change the following
+	option domain-name "wsc2022.kr"
+	option domain-name-servers dmzsrv.wsc2022.kr;
+	option routers 192.168.1.254;
+	option ntp-servers 192.168.2.1;
+	
+	ddns-updates on;
+	ddns-updates-style interim;
+	update-static-leases on;
+	allow client-updates;
+	include "/etc/bind/ddns.key";
+	
+	authoritative;
+	
+	#find one subnet sample u like
+	#then configure this format
+	subnet 192.168.1.0 netmask 255.255.255.0 {
+		range 192.168.1.100 192.168.1.199;
+		option domain-name-servers 192.168.2.1;
+		option domain-name "wsc2022.kr";
+		option routers 192.168.1.254;
+		default-lease-time 600;
+		max-lease-time 7200;
+		ddns-domainname "wsc2022.kr.";
+		ddns-rev-domainname "in-addr.arpa."; #note the . at the end
+	}
+	
+	zone wsc2022.kr. {
+		primary 192.168.2.1; #pt to the primary dns server
+		key ddns-key; #the key we exchanged for ddns to work
+	}
+	zone 1.168.192.in-addr.arpa {
+		primary 192.168.2.1;
+		key ddns-key;
+	}
+	ddns-domainname "wsc2022.kr."; #global
+	ddns-rev-domainname "in-addr.arpa.";
+
+systemctl restart isc-dhcp-server
+
+#troubleshoot guide
+#SRVFAIL --> A record have the intclient remove it
+#UNSYNC CLOCK --> set ur ntp to local clock
+#revord already exists ---> delete the A record or Jnl files
+#Now, let dhcp client request the ip address for testing ddns purpose

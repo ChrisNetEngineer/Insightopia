@@ -1,0 +1,8 @@
+aptitude install libnss-ldapd libpam-ldapd ldap-utils
+
+/etc/pam.d/common-session
+session optional        pam_mkhomedir.so skel=/etc/skel umask=077
+
+
+systemctl restart nscd nslcd
+

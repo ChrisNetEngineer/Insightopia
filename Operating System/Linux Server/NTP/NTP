@@ -1,0 +1,11 @@
+nano /etc/ntp.conf
+
+	#comment out all the pools and add
+	pool  dmzsrv.wsc2022.kr iburst
+	server 127.127.1.0
+	fudge 127.127.1.0 stratum 10
+	
+	systemctl restart ntp
+	
+	#verify status
+	ntpq -p

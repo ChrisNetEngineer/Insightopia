@@ -1,0 +1,18 @@
+# first kill networkmanager
+su -
+systemctl disable NetworkManager
+systemctl stop NetworkManager
+
+nano /etc/network/interfaces
+	auto ens192
+	iface ens192 inet {{dhcp/static}}
+				address 192.168.1.100
+				gateway 192.168.1.254
+				dns-nameservers 192.168.2.1
+
+nano /etc/resolv.conf
+	domain wsc2022.kr
+	name wsc2022.kr
+	nameserver 192.168.2.1
+
+ifup ens192

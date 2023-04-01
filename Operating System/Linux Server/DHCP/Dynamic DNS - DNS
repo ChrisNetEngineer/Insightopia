@@ -1,0 +1,70 @@
+#Please finish implement BIND9 DNS and tested working
+
+#on dmzsrv install ntp for ddns to work
+
+aptitude install ntp openssh-client
+nano /etc/ntp.conf
+
+	#comment out all the pools and add
+	pool  dmzsrv.wsc2022.kr iburst
+	server 127.127.1.0
+	fudge 127.127.1.0 stratum 10
+	
+	systemctl restart ntp
+	
+	#verify status
+	ntpq -p
+
+nano /etc/ssh/sshd_config
+	#line 34 uncomment and change
+	PermitRootLogin yes
+	
+	systemctl restart ssh
+
+cd /etc/bind
+nano named.conf.local
+	#modify the following zone files
+	#place these after ACLs
+	include "/etc/bind/ddns.key";
+	controls {
+			inet 127.0.0.1 allow { localhost; internals; } keys { ddns-key; };
+	};
+	
+	#change these
+	view "internal" {
+			match-clients { internals; };
+			zone "wsc2022.kr" IN {
+				type master;
+				file "/etc/bind/internals/wsc2022.kr.lan";
+				allow-transfer { localhost; };
+				allow-update { key ddns-key; }; # <-- add these
+			};
+	
+	zone "1.168.192.in-addr.arpa" IN {
+				type master;
+				file "/etc/bind/internals/1.168.192.db";
+				allow-transfer { localhost; };
+				allow-update { key ddns-key; }; # <-- add these
+			};
+	
+rndc-confgen -a
+
+cp rndc.key ddns.key
+nano  ddns.key
+	#rename the key as ddns, the values in the key doesnt matter
+	key "ddns-key" {
+	        algorithm hmac-sha256;
+	        secret "ppxPx1DgcHkDWDgngLNlgKAETBPEEL9+k8kn9zI/iKRHMdP/8G+U4FRasufyNGOKuUGgTfNqHnOyFxs3zuWlMA==";
+	};
+
+systemctl disable apparmor
+systemctl stop apparmor
+reboot
+#now go to fw.wsc2022.kr
+
+
+#troubleshooting command
+rndc freeze # prevents A record changes
+
+# after set up dhcp then do this
+rndc thaw # allows A record changes

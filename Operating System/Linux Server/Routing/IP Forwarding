@@ -1,0 +1,11 @@
+# temporary ip forwarding
+sysctl net.ipv4.ip_forward=1
+
+# persistent ipv4 forwarding 
+vim /etc/sysctl.conf
+	# uncomment
+	net.ipv4.ip_forward=1
+
+# check whether is it enabled
+sysctl -p /etc/sysctl.conf
+/etc/init.d/procps restart

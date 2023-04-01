@@ -1,0 +1,38 @@
+aptitude install ldap-utils slapd
+
+//Create Base.ldif
+dn: ou=people,dc=wsc2022,dc=kr
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=wsc2022,dc=kr
+objectClass: organizationalUnit
+ou: groups 
+
+ldapadd -x -D cn=admin,dc=wsc2022,dc=kr -W -f base.ldif
+
+//Create user .ldif
+
+dn: uid=james,ou=people,dc=wsc2022,dc=kr
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: james
+sn: debian
+userPassword: {SSHA}xxxxxxxxxxxxxxxxx
+loginShell: /bin/bash
+uidNumber: 2000
+gidNumber: 2000
+homeDirectory: /home/james
+
+dn: cn=james,ou=groups,dc=wsc2022,dc=kr
+objectClass: posixGroup
+cn: james
+gidNumber: 2000
+memberUid: james
+
+//Cerate hash password and append to user.ldif
+slappasswd >> james.ldif
+#password Skill39
+
+ldapadd -x -D cn=admin,dc=wsc2022,dc=kr -W -f james.ldif
