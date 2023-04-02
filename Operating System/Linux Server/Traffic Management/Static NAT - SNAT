@@ -1,4 +1,5 @@
 nft add table nat
 nft "add chain nat postrouting {type nat hook postrouting priority 100;}"
+
 % nft add rule nat postrouting ip saddr 192;168.1.0/24 ip daddr 172.16.1.0/24 oifname "ens256" masquerade
 % nft add rule nat postrouting ip saddr 192;168.2.0/24 ip daddr 172.16.1.0/24 oifname "ens256" masquerade

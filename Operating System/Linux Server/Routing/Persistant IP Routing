@@ -1,0 +1,21 @@
+# persistent ip route
+nano /ip_route.sh
+	#!/bin/sh
+	ip route add 210.103.5.128/25 via 210.103.5.62
+	ip route add 210.103.5.64/26 via 210.103.5.62
+	ip route add 192.168.1.0/24 via 10.1.1.1
+  ip route add 192.168.2.0/24 via 10.1.1.1
+ 
+
+chmod 777 /ip_route.sh
+
+nano /etc/systemd/system/script.service
+	[Unit]
+	After=default.target
+	[Service]
+	ExecStart=/ip_route.sh
+	[Install]
+	WantedBy=default.target
+
+systemctl enable script.service
+systemctl start script.service

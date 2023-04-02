@@ -1,0 +1,8 @@
+//nftable NAT
+nft add table nat
+nft 'add chain nat prerouting {type nat hook prerouting priority -100; }'
+
+ 
+
+nft 'add rule nat prerouting iifname "ens224" tcp dport { 80,443,53,161,25 } dnat to 192.168.2.1'
+nft 'add rule nat prerouting iifname "ens224" udp dport { 80,443,53,161,25 } dnat to 192.168.2.1'

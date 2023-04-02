@@ -1,0 +1,59 @@
+aptitude install strongswan
+
+vim /etc/ipsec.conf
+	config setup
+	        charondebug="all"
+	        uniqueids=yes
+	        strictcrlpolicy=no
+	reboot
+	conn %default
+	conn vpn
+            auto=start
+			authby=secret
+	        keyexchange=ikev2
+	        type=tunnel
+	        left=210.103.5.1
+	        leftsubnet=10.1.1.0/24
+	        leftsourceip=172.16.1.252
+	        right=210.103.5.65
+	        rightsubnet=172.16.1.0/24
+	        ike=aes256-sha2_256-modp1024!
+	        esp=aes256-sha2_256!
+            aggressive=no
+	        keyingtries=%forever
+	        
+
+
+vim /etc/ipsec.secret
+
+    210.103.5.65 210.103.5.1 : PSK "Skill39"
+    210.103.5.1 210.103.5.65 : PSK "Skill39"
+
+
+
+//Built Tunnel Interface
+
+im /etc/sysctl.conf
+  net.ipv4.conf.vti0.disable_policy=1
+
+/etc/init.d/procps restart
+
+
+vim /etc/strongswan.d/charon.conf
+	charon {
+		install_routes = no
+	}
+
+# make vritual tunnel interface
+# any traffic directing to 172.16.1.0/24 network will be directed to use the vti
+vim /ip_route.sh
+	ip tunnel add vti0 local 210.103.5.1 remote 210.103.5.65 mode vti key 12
+	ip link set up dev vti0
+	ip route add 172.16.1.0/24 dev vti0
+
+
+reboot
+
+
+ipsec restart
+ipsec statusall
