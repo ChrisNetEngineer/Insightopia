@@ -1,0 +1,30 @@
+Param([string] $FilePath = 'C:\WSC2022_TP39_ModuleA_Users.csv')
+$File = Import-Csv $FilePath
+
+$File | ForEach-Object {
+	$upn = $_.'SamAccount'
+
+	New-ADUser `
+	-Name ($_.'GivenName' + ' ' + $_."Surname") `
+  -AccountPassword (ConvertTo-SecureString $_.Password -AsPlainText -Force)
+	-City $._City `
+	-DisplayName ($_.'GivenName' +  ' ' + $_."Surname") `
+	-EmailAddress $_.'Email' `
+	-Enabled $true `
+	-GivenName $_.'GivenName' `
+	-HomeDrive 'H:\' `
+	-HomeDirectory ("\\FR-FILE\homes\" + $_.'SamAccount') `
+	-PasswordNeverExpires $true `
+	-Path ("ou="+$_."Organization" + ",dc=wsc2024,dc=fr") `
+	-SamAccountName $_.'SamAccount' `
+	-UserPrincipalName $upn@wsc2024.fr `
+	-Title $_.'Title' `
+	-OfficePhone $_.'OfficePhone' `
+	-Surname $_.Surname `
+	-Organization $_.'Organization' 
+	Unlock-ADAccount -Identity $_.'SamAccount' `
+}
+
+Command to test:
+'Managers','Competitors','Visitors' | foreach { Get-ADUser -Filter * -SearchBase "ou=$_,dc=wsc2024,dc=fr" | measure | select Count }
+Get-ADUser mgr-001 -Properties * | select City,Enabled,DisplayName,GivenName,mail,OfficePhone,Organization,Surname,Title

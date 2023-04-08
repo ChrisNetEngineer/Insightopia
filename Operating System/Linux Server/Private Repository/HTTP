@@ -1,0 +1,3 @@
+//etc/apt/sources.list
+
+deb [trusted=yes] http://your-site.com/your/repository/ /

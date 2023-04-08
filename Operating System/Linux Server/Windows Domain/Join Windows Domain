@@ -1,0 +1,56 @@
+nano /etc/resolv.conf
+	nameserver 172.16.1.1
+	search wsc2024.fr
+	domain wsc2024.fr
+
+aptitude install realmd 
+realm discover wsc2024.fr
+aptitude install sssd sssd-tools libnss-sss adcli samba-common-bin
+
+#ensure all dependencies are insstalled 
+realm join wsc2024.fr -U 'Administrator' --install=/ --verbose
+#password Skill39
+
+#once joined go to 
+nano /etc/ssh/sshd_config
+	#uncomment and change all of these to yes
+	#Kerberos options
+	KerberosAuthentication yes
+	KerberosOrLocalPasswd yes
+	KerberosTicketCleanup yes
+	KerberosGetAFSToken yes
+	
+	# GSSAPI options
+	GSSAPIAuthentication yes
+	GSSAPICleanupCredentials yes
+
+aptitude install krb5-user
+nano /etc/krb5.conf
+//add the following
+[libdefaults]
+		dns_lookup_realm = false
+		dns_lookup_kdc = true
+
+        
+
+aptitude install ntp open-vm-tools open-vm-tools-desktop
+nano /etc/ntp.conf
+#comment out all the pool & add the following
+pool fr-dc.wsc2024.fr iburst
+
+systemctl restart ntp
+ntpq -p #check whether your ntp up
+
+#try to login
+su administrator@wsc2024.fr
+
+/etc/pam.d/common-session
+session optional        pam_mkhomedir.so skel=/etc/skel umask=077
+
+#disable apparmor for domain login to work
+systemctl disable apparmor
+systemctl stop apparmor
+reboot
+
+login: administrator@wsc2024.fr
+password:skill39
