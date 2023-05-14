@@ -1,0 +1,26 @@
+int tunnel1
+ip ospf 1 area 0
+ip ospf network broadcast
+
+int g0/1
+ip ospf 1 area 0
+
+
+int tunnel 15
+ip address 172.16.0.6 255.255.255.252
+ip mtu 1400
+tunnel source 98.76.5.1
+tunnel destination 98.76.1.1
+keepalive 5 10
+ip ospf 1 area 0
+ip ospf network point-to-point
+
+
+int tunnel 16
+ip address 172.16.0.10 255.255.255.252
+ip mtu 1400
+tunnel source 98.76.5.1
+tunnel destination 98.76.2.1
+keepalive 5 10
+ip ospf 1 area 0
+ip ospf network point-to-point

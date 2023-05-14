@@ -1,0 +1,7 @@
+router ospf 1
+default-information originate
+
+
+ospf doesnt have load balancing for unequal cost, however we can influence OSPF to make certain choices by configuring certain static routing, default routing to make it appear that there is unequal cost associated with ospf
+
+We will overcome this by implemnting default routing

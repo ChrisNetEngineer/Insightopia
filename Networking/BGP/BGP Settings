@@ -1,0 +1,33 @@
+router bgp 65000
+ neighbor 98.76.1.1 remote-as 65001
+ neighbor 98.76.1.1 password WSS2023
+
+ neighbor 98.76.2.1 remote-as 65002
+ neighbor 98.76.2.1 password WSS2023
+
+ neighbor 98.76.3.1 remote-as 65003
+ neighbor 98.76.3.1 password WSS2023
+
+ neighbor 98.76.4.1 remote-as 65004
+ neighbor 98.76.4.1 password WSS2023
+
+ neighbor 98.76.5.1 remote-as 65005
+ neighbor 98.76.5.1 password WSS2023
+
+ network 8.8.8.8 mask 255.255.255.255
+ network 98.76.0.0 mask 255.255.255.0
+ network 98.76.54.0 mask 255.255.255.0
+
+#If neighbour address is a loopback address
+router bgp 65001
+ neighbor 2.2.2.2 remote-as 65002
+ neighbor 2.2.2.2 ebgp-multihop 2
+ neighbor 2.2.2.2 update-source Loopback0
+ neighbor 2.2.2.2 password WSS2023
+ 
+
+ neighbor 98.76.1.254 remote-as 65000
+ neighbor 98.76.1.254 password WSS2023
+
+ network 1.1.1.1 mask 255.255.255.255
+ network 98.76.1.0 mask 255.255.255.0

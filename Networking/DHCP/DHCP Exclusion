@@ -1,0 +1,23 @@
+ip dhcp excluded-address 192.168.20.1 192.168.20.99
+ip dhcp excluded-address 192.168.20.201 192.168.20.254
+
+ip dhcp excluded-address 172.20.10.1 172.20.10.99
+ip dhcp excluded-address 172.20.10.201 172.20.10.254
+
+ip dhcp excluded-address 172.20.20.1 172.20.20.99
+ip dhcp excluded-address 172.20.20.201 172.20.20.254
+
+ip dhcp pool HQCLI-VLAN20
+network 192.168.20.0 255.255.255.0
+default-router 192.168.20.254
+dns-server 192.168.100.1
+
+ip dhcp pool BR1CLI-LAN
+network 172.20.10.0 255.255.255.0
+default-router 172.20.10.254
+dns-server 192.168.100.1
+
+ip dhcp pool BR2CLI-LAN
+network 172.20.20.0 255.255.255.0
+default-router 172.20.20.254
+dns-server 192.168.100.1

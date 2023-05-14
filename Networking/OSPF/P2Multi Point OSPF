@@ -1,0 +1,58 @@
+key chain BR1
+ key 1
+  key-string WSS2023
+  cryptographic-algorithm md5
+
+
+router ospf 1
+network 192.168.2.0 0.0.0.255 area 0
+router-id 2.2.2.2
+neighbor 1.1.1.0
+
+
+int range g0/1-2
+ip ospf 1 area 0
+
+tunnel1
+ip ospf 1 area 0
+ip ospf network point-to-multipoint
+
+
+int tunnel 11
+ip address 172.16.1.5 255.255.255.252
+ip mtu 1400
+tunnel source 2.2.2.2
+tunnel destination 3.3.3.3
+
+ip ospf 1 area 1
+ip ospf network point-to-point
+ip ospf authentication key-chain BR1
+
+
+int tunnel 13
+ip address 172.16.2.5 255.255.255.252
+ip mtu 1400
+tunnel source 98.76.2.1
+tunnel destination 98.76.4.1
+ip ospf 1 area 2
+ip ospf network point-to-point
+
+
+int tunnel 14
+ip address 172.16.0.2 255.255.255.252
+ip mtu 1400
+tunnel source 98.76.2.1
+tunnel destination 98.76.1.1
+keepalive 5 10
+ip ospf 1 area 0
+ip ospf network point-to-point 
+
+
+int tunnel 16
+ip address 172.16.0.9 255.255.255.252
+ip mtu 1400
+tunnel source 98.76.2.1
+tunnel destination 98.76.5.1
+keepalive 5 10
+ip ospf 1 area 0
+ip ospf network point-to-point

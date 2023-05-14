@@ -1,0 +1,15 @@
+crypto isakmp policy 10
+hash md5
+authentication pre-share
+group 2
+encryption 3des
+
+crypto isakmp key cisco address 0.0.0.0
+crypto ipsec transform-set TSET esp-des esp-md5-hmac
+mode transport
+
+crypto ipsec profile TST
+set transform-set TSET
+
+interface tunnel1
+tunnel protection ipsec profile TST

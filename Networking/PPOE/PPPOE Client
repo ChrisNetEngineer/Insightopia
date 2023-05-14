@@ -1,0 +1,21 @@
+int g0/0
+no ip addr
+
+interface Dialer1
+encapsulation ppp
+ip address 98.76.3.1 255.255.255.0
+no shut
+
+dialer pool 2
+exit
+
+int g0/0
+pppoe-client dial-pool-number 2
+
+
+interface Dialer1
+encapsulation ppp
+ppp authentication chap callin
+ppp chap hostname chapuser
+
+username ISP password 0 cisco123

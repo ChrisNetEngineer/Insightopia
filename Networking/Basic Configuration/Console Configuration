@@ -1,0 +1,17 @@
+username admin privilege 15 algorithm-type scrypt secret cisco123
+
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default  local if-authenticated
+aaa authorization network default  local
+aaa authorization console 
+
+line vty 0 15
+login authentication default
+authorization exec default
+
+line con 0
+login authentication default
+authorization exec default
+
+do wr

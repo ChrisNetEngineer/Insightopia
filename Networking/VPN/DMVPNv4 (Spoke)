@@ -1,0 +1,16 @@
+interface Tunnel1
+ip address 10.0.0.3 255.255.255.0  
+no ip redirects
+ip nhrp map multicast dynamic 
+    
+tunnel source loopback0
+tunnel mode gre multipoint
+ip nhrp authentication nhrp1234
+ip nhrp map 10.0.0.1  1.1.1.1 
+ip nhrp network-id 1
+ip nhrp nhs 10.0.0.1    
+ip nhrp registration no-unique  
+ip nhrp map multicast 10.0.0.1
+ip mtu 1440
+load-interval 30
+keepalive 5 10

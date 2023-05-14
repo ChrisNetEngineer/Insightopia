@@ -1,0 +1,19 @@
+#configuring port forwarding
+int g0/0 
+ip nat outside
+ip nat allow-static-host
+ip nat enable
+
+
+int g0/1 
+ip nat inside
+ip nat allow-static-host
+ip nat enable
+
+exit
+conf t
+
+ip nat inside source static tcp 192.168.100.1 0.0.0.0 80 98.76.5.1 0.0.0.0 80
+
+
+#Ensure that static routing is configured on both gateway. This is to ensure connectibity

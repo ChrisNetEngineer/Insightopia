@@ -1,0 +1,18 @@
+int tunnel 12
+ip address 172.16.2.2 255.255.255.252
+ip mtu 1400
+tunnel source 4.4.4.4
+tunnel destination 1.1.1.1
+keepalive 5 10
+ip ospf 1 area 2
+ip ospf network point-to-point
+
+
+int tunnel 13
+ip address 172.16.2.6 255.255.255.252
+ip mtu 1400
+tunnel source 4.4.4.4
+tunnel destination 2.2.2.2
+keepalive 5 10
+ip ospf 1 area 2
+ip ospf network point-to-point

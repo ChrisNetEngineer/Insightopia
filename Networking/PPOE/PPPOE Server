@@ -1,0 +1,19 @@
+int g0/3
+no ip addr
+
+
+interface Virtual-Template1
+ip address 98.76.3.254
+no shut
+
+
+bba-group pppoe global
+virtual-template 1
+
+int g0/3
+pppoe enable group global
+
+
+interface Virtual-Template1
+ppp authentication chap
+username chapuser password 0 cisco123

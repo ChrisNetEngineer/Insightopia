@@ -1,0 +1,15 @@
+int g0/1
+ip nat inside
+ip nat allow-static-host
+ip nat enable
+
+int dialer 1
+ip nat outside
+ip nat allow-static-host
+ip nat enable
+
+exit
+
+access-list 101 permit ip 172.20.10.0 0.0.0.255 any
+
+ip nat inside source list 101 interface Dialer1 overload

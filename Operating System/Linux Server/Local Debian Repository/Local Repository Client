@@ -1,0 +1,20 @@
+nano /etc/apt/sources.list
+
+#add the following
+deb [trusted=yes] http://192.168.0.251/ /
+
+apt update
+
+#confirm that the cd's have been added
+apt-cache search aptitude
+apt-cache search haproxy
+apt-cache search keepalived
+apt-cache search rsync
+
+#if the packages can be found thats good
+#to ensure the ability to download ensure the following
+apt-get install aptitude
+apt-get install bind9 bind9-utils
+
+on the client linux machines
+this allows you to confirm that the local debian repository has been enabled

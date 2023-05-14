@@ -1,0 +1,10 @@
+int tu1
+ipv6 address 2001:DB8::3/64
+ipv6 nhrp map 2001:DB8::1/128 1.1.1.1
+ipv6 nhrp map multicast 1.1.1.1
+ipv6 nhrp network-id 2
+ipv6 nhrp nhs 2001:DB8::1
+ipv6 mtu 1440
+ipv6 nhrp authentication WSS2023
+ipv6 nhrp network-id 2
+no ipv6 nhrp redirect

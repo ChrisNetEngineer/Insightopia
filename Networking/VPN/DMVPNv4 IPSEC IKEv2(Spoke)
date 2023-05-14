@@ -1,0 +1,25 @@
+crypto ikev2 proposal DMVPN_PROPOSAL
+encryption aes-cbc-128 
+integrity sha256 
+group 14
+
+crypto ikev2 policy DMVPN_POLICY
+proposal DMVPN_PROPOSAL
+
+crypto ikev2 keyring DMVPN_KEYRING
+peer DMVPN
+address 0.0.0.0
+pre-shared-key WSS2023
+
+crypto ikev2 profile DMVPN_PROFILE
+match identity remote address 0.0.0.0
+authentication remote pre-share
+authentication local pre-share
+keyring local DMVPN_KEYRING
+
+crypto ipsec profile PFL_DMVPN
+set ikev2-profile DMVPN_PROFILE
+
+
+interface tunnel1
+tunnel protection ipsec profile PFL_DMVPN

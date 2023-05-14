@@ -1,0 +1,52 @@
+#first mount the cds
+#install the following packages
+
+apt-get install aptitude
+aptitude install dpkg-dev 
+aptitude install apache2
+mkdir -p /var/www/pool/
+
+#now edit the 000-default.conf
+cd /etc/apache2/sites-available
+nano 000-default.conf
+#change the following
+
+DocumentRoot /var/www/pool
+
+#go to the bottom add the following
+<Directory "/var/html/pool">
+	Options +Indexes
+  AllowOverride All
+  Order allow,deny
+  Allow from all
+  Require all granted
+</Directory>
+
+a2dissite 000-default.conf
+a2ensite 000-default.conf
+systemctl reload apache2
+
+#mount the cdrom
+apt-cdrom add
+
+#check if the files have been mounted may take a while
+cd /media/cdrom
+ls 
+
+#if files are mounted based on the dvd youve mounted do the following
+#assuming youre doing dvd1
+cp -r /media/cdrom/pool/* /var/www/LocalRepository/pool/
+#it will take a while
+#once all cd's are scanned do the following
+cd /var/www/LocalRepository/
+dpkg-scanpackages -m . | gzip > Packages.gz
+
+#it will take a while 
+#to verify completion the following will be shown (cd 1-4) 
+dpkg-scanpackages: info: Wrote 11794 entries to output Packages file.
+
+
+
+
+
+

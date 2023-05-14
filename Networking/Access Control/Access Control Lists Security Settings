@@ -1,0 +1,8 @@
+access-list 102 deny tcp 98.76.3.1 0.0.0.0 192.168.100.1 0.0.0.0 eq 80
+access-list 102 deny tcp 172.20.10.0 0.0.0.255 192.168.100.1 0.0.0.0.255 eq 80
+access-list 102 deny icmp 98.76.4.1 0.0.0.0 192.168.100.1 0.0.0.0 echo
+access-list 102 deny icmp 172.20.20.0 0.0.0.255 192.168.100.1 0.0.0.255 echo
+access-list 102 permit ip any any
+
+int range g0/0, tu1,tu15,tu16
+ip access-group 102 in

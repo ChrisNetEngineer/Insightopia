@@ -1,0 +1,47 @@
+en 
+conf t
+hostname ISP
+
+enable algorithm-type scrypt secret WSS2023
+ip domain-name wss2023.net
+clock timezone SGT +8
+lin con 0
+logging sync
+no ip domain lookup
+ipv6 unicast-routing
+
+do wr
+
+no ip domain lookup
+line con 0
+logging sync
+
+int loopback 0
+ip addr 8.8.8.8 255.255.255.255 
+no shut
+
+int g0/0
+ip addr 98.76.54.254 255.255.255.0
+no shut
+
+int g0/1
+ip addr 98.76.1.254 255.255.255.0
+no shut
+
+int g0/2
+ip addr 98.76.2.254 255.255.255.0
+no shut
+
+int g0/3
+ip addr 98.76.3.254 255.255.255.0
+no shut
+
+int g0/4
+ip addr 98.76.4.254 255.255.255.0
+no shut
+
+int g0/5
+ip addr 98.76.5.254 255.255.255.0
+no shut
+
+do wr

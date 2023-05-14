@@ -1,0 +1,10 @@
+ipv6  router eigrp 2023
+eigrp router-id 7.7.7.2
+
+int tu1
+ipv6 en
+ipv6 eigrp 2023
+
+int range g0/1-2
+ipv6 en
+ipv6 eigrp 2023

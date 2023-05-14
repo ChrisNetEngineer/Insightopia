@@ -1,0 +1,16 @@
+int range g0/1-2
+ip nat inside
+ip nat allow-static-host
+ip nat enable
+
+int g0/0
+ip nat outside
+ip nat allow-static-host
+ip nat enable
+
+exit
+
+access-list 101 permit icmp host 192.168.10.1 any
+
+ip nat pool HQCLI 98.76.12.1 98.76.12.10 netmask 255.255.255.0
+ip nat inside source list 101 pool HQCLI

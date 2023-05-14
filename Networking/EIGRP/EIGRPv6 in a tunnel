@@ -1,0 +1,17 @@
+ipv6 router eigrp 2023
+eigrp router-id 7.7.7.1
+
+int tu1
+ipv6 eigrp 2023
+no ipv6 split-horizon eigrp 2023
+no ipv6 next-hop-self eigrp 2023
+
+
+int tu1
+ipv6 en
+ipv6 eigrp 2023
+
+int range g0/1-2
+ipv6 en
+ipv6 eigrp 2023
+
