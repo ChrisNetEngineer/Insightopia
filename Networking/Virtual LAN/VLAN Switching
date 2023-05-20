@@ -1,0 +1,27 @@
+int range g1/1-2, g0/1
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport mo dynamic auto
+sw trunk allowed vlan remove 1-4094
+sw trunk allowed vlan 10,20
+no shut
+
+vtp domain wss2023.net
+vtp version 3
+vtp mode client mst
+
+int vlan 10
+ip add 192.168.10.202 255.255.255.0
+ipv6 add 2001:624C:3201:10::202/64
+no shut
+
+int g0/0 
+sw acc vlan 20
+sw mo access
+
+int vlan 20
+ip add 192.168.20.202 255.255.255.0
+ipv6 add 2001:624c:3201:20::202/64
+no shut 
+
+do wr

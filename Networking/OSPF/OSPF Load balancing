@@ -1,5 +1,9 @@
 router ospf 1
 default-information originate
+maximum-paths 1
+
+
+ip route 0.0.0.0 0.0.0.0 192.168.2.6
 
 
 ospf doesnt have load balancing for unequal cost, however we can influence OSPF to make certain choices by configuring certain static routing, default routing to make it appear that there is unequal cost associated with ospf

@@ -1,0 +1,7 @@
+int g0/0
+spanning-tree portfast
+	spanning-tree bpduguard enable
+
+spanning-tree mo mst
+int po3
+spanning-tree mst 2 cost 200000000

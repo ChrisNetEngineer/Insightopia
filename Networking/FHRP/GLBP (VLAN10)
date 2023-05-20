@@ -1,0 +1,15 @@
+tracked 1 interface g0/0 line-protocol
+
+int vlan 10
+glbp 10 ip 192.168.10.254
+glbp 10 priority 200
+glbp 10 preempt 
+glbp 10 authentication md5 key-string WSS2023
+glbp 10 forwarder preempt delay minimum 0
+glbp 10 weighting track 1 decrement 150
+
+int vlan 20
+glbp 20 ip 192.168.20.254
+glbp 20 preempt
+glbp 20 authentication md5 key-string WSS2023
+glbp forwarder preempt delay minimum 0
