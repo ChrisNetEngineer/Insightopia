@@ -1,0 +1,16 @@
+int g0/0
+switchport mode access
+switchport port-security
+
+switchport port-security maximum 2
+switchport port-security violation shutdown
+
+switchport port-security aging time 3
+errdisable recovery cause psecure-violation
+errdisable recovery interval 180
+
+#Notes: 
+
+switchport port-security maximum 2 , sets the maximum number of mac address connected to the switch to be 2
+
+switch port-security violation shutdown

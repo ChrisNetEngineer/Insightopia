@@ -1,0 +1,16 @@
+int range po3,g0/1
+ip dhcp snooping trust
+
+int g0/0
+ip dhcp snooping limit rate 10
+
+exit
+
+ip dhcp snooping
+ip dhcp snooping vlan 20
+
+#if dont need option 82
+no ip dhcp snooping information option 
+
+#if need option 82
+ip dhcp snooping information option 

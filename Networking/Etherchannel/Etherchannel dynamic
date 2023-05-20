@@ -1,0 +1,17 @@
+int range g0/2-3
+shutdown
+channel-group 1 mode desirable
+no shut
+
+int range g1/1-2
+shutdown
+channel-group 2 mode active
+no shut
+
+int range po1,po2
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport mo dynamic desirable 
+no shut
+
+port-channel load-balance src-dst-ip

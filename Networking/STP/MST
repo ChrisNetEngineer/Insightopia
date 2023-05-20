@@ -1,0 +1,17 @@
+do vtp primary force
+do vtp primary vlan force
+do vtp primary mst force
+
+spanning-tree mode mst
+spanning-tree mst configuration
+name WSS2023.NET
+revision 1
+instance 1 vlan 10
+instance 2 vlan 20
+exit
+spanning-tree mst 1 root primary
+spanning-tree mst 2 root secondary
+
+int range g1/0,po1,po2
+sw trunk allowed vlan remove 1-4094
+sw trunk allowed vlan 10,20
