@@ -1,0 +1,20 @@
+//FHRP
+interface Vlan10
+ standby version 2
+ standby 104 ip 192.168.10.254
+ standby 106 ipv6 2002:624C:3201:10::254/64
+ ipv6 address FE80::4 link-local
+ ipv6 address 2001:624C:3201:10::252/64
+ ipv6 enable
+
+interface Vlan20
+ standby version 2
+ standby 204 ip 192.168.20.254
+ standby 204 priority 200
+ standby 204 preempt
+ standby 206 ipv6 2002:624C:3201:20::254/64
+ standby 206 priority 200
+ standby 206 preempt
+ ipv6 address FE80::3 link-local
+ ipv6 address 2001:624C:3201:20::252/64
+ ipv6 enable

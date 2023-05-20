@@ -1,0 +1,10 @@
+privilege interface level 5 ipv6
+privilege interface level 5 shutdown
+privilege interface level 5 ip
+privilege interface level 5 no ipv6
+privilege interface level 5 no shutdown
+privilege interface level 5 no ip
+privilege interface level 5 no
+privilege configure level 5 interface
+privilege exec level 5 configure terminal
+privilege exec level 5 configure

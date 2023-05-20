@@ -1,0 +1,22 @@
+ipv6 unicast-routing
+
+router ospfv3 1
+address-family ipv6 unicast
+area 2022 range 2001:624C:3201:10::/64
+area 2022 range 2001:624C:3201:20::/64
+area 2022 virtual-link 2.2.2.2
+area 2022 virtual-link 1.1.1.1
+
+key chain R1
+key 1
+cryptographic-algorithm hmac-sha-512
+key-string Skill39
+
+router ospfv3 1
+address-family ipv6 unicast
+area 2022 authentication key-chain R1
+
+int range g0/0-1
+ipv6 enable
+ipv6 ospf 1 area 2022
+ospfv3 network point-to-point

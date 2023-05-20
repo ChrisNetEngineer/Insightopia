@@ -1,0 +1,10 @@
+logging message-counter syslog
+logging trap notification
+loggging source-interface Loopback 0
+logging 172.16.30.100 
+logging synchronous
+
+
+#logging syslog-srv-ip 
+#.e.g
+logging 172.16.30.100 

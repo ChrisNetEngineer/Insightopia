@@ -1,0 +1,34 @@
+crypto ikev2 proposal PROP
+ encryption aes-gcm-128
+ prf sha256
+ group 5
+crypto ikev2 policy IKEV2_POLICY
+ proposal PROP
+crypto ipsec transform-set TSET esp-aes 192 esp-sha256-hmac
+
+crypto ikev2 keyring KEYRING
+ peer ALL
+ address 0.0.0.0 0.0.0.0
+ pre-shared-key local Cisco1234
+ pre-shared-key remote Cisco1234
+
+crypto ikev2 profile IKEV2_PROFILE
+ match identity remote address 98.76.5.1 255.255.255.255
+ identity local address 98.76.1.1
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local KEYRING
+
+ip access-list extended ASA_VPN 
+permit ip 98.76.1.0 0.0.0.255 192.168.100.1 0.0.0.255
+permit ip any any
+
+crypto map CM 10 ipsec-isakmp
+ set peer 98.76.5.1
+ set transform-set TSET
+ set ikev2-profile IKEV2_PROFILE
+ match address ASA_VPN
+ crypto map CM
+
+interface GigabitEthernet0/0
+ crypto map CM

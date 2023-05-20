@@ -1,0 +1,83 @@
+en
+# use password Skill39 
+
+conf t
+hostname FW1
+domain-name wsc2022.net
+enable password Skill39 (Apparently default the password will be stored in pbkdf2)
+clock timezone KST +9
+
+
+
+int GigabitEthernet0/0
+nameif outside
+ip address 98.76.5.1 255.255.255.0
+security-level 0
+no shutdown
+
+int GigabitEthernet0/1
+nameif inside
+ip address 192.168.100.254 255.255.255.0
+ipv6 address 2001:624c:3201:100::254/64
+security-level 100
+no shutdown
+
+//BGP
+router bgp 65005
+address-family ipv4 unicast
+neighbor 98.76.5.254 remote-as 65000
+neighbor 98.76.5.254 activate
+network 98.76.5.0 mask 255.255.255.0
+
+//line con security
+
+username admin password Skill39 privilege 15
+aaa authentication ssh console LOCAL
+aaa authentication enable console LOCAL
+aaa authentication serial console LOCAL
+ssh version 2
+
+//snmp
+snmp-server location  Ilsan, Korea
+snmp-server contact admin@wsc2022.net
+
+//ntp
+route outside 8.8.8.8 255.255.255.255 98.76.5.254
+ntp server 8.8.8.8
+
+//NAT
+dns server-group DefaultDNS
+domain-name wsc2022.net
+
+object network DC-SRV
+ host 192.168.100.1
+object network inside-network
+ subnet 192.168.100.0 255.255.255.0
+object network DC-SRV-DNS
+ host 192.168.100.1
+object network DC-SRV-HTTP
+ host 192.168.100.1
+
+object network DC-SRV
+ nat (inside,outside) static interface
+object network DC-SRV-DNS
+ nat (inside,outside) static interface service tcp domain domain 
+object network DC-SRV-HTTP
+ nat (inside,outside) static interface service tcp www www 
+access-group inbound in interface outside
+
+access-list inbound extended permit tcp any object DC-SRV-DNS eq domain 
+access-list inbound extended permit tcp any object DC-SRV-HTTP eq www
+
+
+//OSPF
+ipv6 router ospf 1
+area 100 range 2001:624c:3201:100::/64
+
+interface GigabitEthernet0/0
+ipv6 enable
+ipv6 ospf 1 area 0
+
+interface GigabitEthernet0/1
+ipv6 enable
+ipv6 ospf 1 area 100

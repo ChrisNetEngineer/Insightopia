@@ -1,0 +1,14 @@
+#Static IP Assignment
+ifconfig eth0 192.168.20.101 netmask 255.255.255.0
+ifconfig eth0 2001:624c:3201:20::101/64 
+
+#Configure Default Gateway
+route add default gw 192.168.10.202
+
+#Add static route for IPv4 & IPv6
+sudo ip route add 172.20.20.0/24 via 172.20.10.254
+sudo ip -6 route add 2001:624c:3201:10::/64 via 2001:624c:3201:10::201
+
+
+#DHCP IP Assignment
+ifconfig eth0 2001:624c:3201:20::101/64 

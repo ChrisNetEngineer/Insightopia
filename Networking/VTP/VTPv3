@@ -1,0 +1,19 @@
+//1. Enable trunking
+
+int range {{required interfaces}}
+
+switchport trunk encapsulation dot1q
+
+switchport mode trunk
+
+//2. Add VTP domain 
+
+vtp domain wsc2022.net
+
+//3. change VTP version to 3
+
+vtp version 3
+
+//4. Make a switch be Primary swith, if not not able to create vlan
+
+inserthostname_here# vtp primary

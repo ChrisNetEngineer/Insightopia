@@ -1,0 +1,28 @@
+crypto ikev2 policy 10
+ encryption aes-gcm
+ integrity null
+ grou p 5
+ prf sha256
+ lifetime seconds 86400
+
+crypto ipsec ikev2 ipsec-proposal TSET
+ protocol esp encryption aes-192
+ protocol esp integrity sha-256
+
+tunnel-group 98.76.1.1 type ipsec-l2l
+tunnel-group 98.76.1.1 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key 0 Cisco1234
+ ikev2 local-authentication pre-shared-key 0 Cisco1234
+
+group-policy DfltGrpPolicy attributes
+ vpn-tunnel-protocol ikev2
+
+access-list R1_VPN extended permit ip 192.168.100.0 255.255.255.0 98.76.1.0 255.255.255.0
+access-list R1_VPN extended permit ip any any
+
+crypto map CM 10 match address R1_VPN
+crypto map CM 10 set peer 98.76.1.1
+crypto map CM 10 set ikev2 ipsec-proposal TSET
+crypto map CM interface outside
+crypto ikev2 enable outside
+

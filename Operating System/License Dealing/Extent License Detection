@@ -1,0 +1,12 @@
+#Windows Server
+slmgr -rearm
+
+#Windows Enterprise 
+slmgr.vbs /upk
+slmgr.vbs -rearm
+
+NOTE: Only can be used 6x
+
+- Win 10 Enterprise trial is 10 days
+- Win 10 2019 Server trial 180days
+-The trial iso will turn off the slmgr setting after 1 hour

@@ -1,0 +1,4 @@
+int range g1/1-2, g0/1
+sw trunk allowed vlan remove 1-4094
+sw trunk allowed vlan 10,20
+no shut

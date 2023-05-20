@@ -6,3 +6,11 @@ access-list 102 permit ip any any
 
 int range g0/0, tu1,tu15,tu16
 ip access-group 102 in
+
+
+#Named ACL
+ip access-list extended SSH_ACCESS
+ permit icmp any any
+ permit ip any any
+ permit tcp 192.168.20.0 0.0.0.255 any eq 22
+ deny   tcp any any eq 22

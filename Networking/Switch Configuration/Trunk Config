@@ -1,0 +1,14 @@
+#COnfigure interface using dot1q encasulation protocol
+int range g1/1-2, g0/1
+switchport trunk encapsulation dot1q
+
+#Configure interface be a trunk inerface
+switchport mode trunk
+
+#Configure DTP
+switchport mo dynamic auto
+switchport mo dynamic desirable
+
+#To disbale DTP
+switchport nonegotiate
+

@@ -1,0 +1,37 @@
+crypto ikev2 keyring KEYRING1
+ peer FW
+  address 98.76.5.1
+  pre-shared-key local cisco
+  pre-shared-key remote cisco
+
+crypto ikev2 proposal ToASA 
+ encryption aes-cbc-256
+ integrity sha1
+ group 14
+
+crypto ikev2 policy ToASA_Policy 
+ proposal ToASA
+
+crypto ikev2 profile ToASA-Profile
+ match identity remote address 98.76.5.1 255.255.255.255 
+ identity local address 98.76.1.1
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local KEYRING1
+   
+crypto ipsec transform-set IPSEC_SET esp-aes 256 esp-sha-hmac 
+ mode tunnel
+
+ip access-list extended Allow_ALL
+ permit ip 192.168.1.0 0.0.0.255 192.168.100.0 0.0.0.255
+
+crypto map To_ASA 10 ipsec-isakmp 
+ set peer 98.76.5.1
+ set transform-set IPSEC_SET 
+ set ikev2-profile ToASA-Profile
+ match address Allow_ALL
+
+interface GigabitEthernet0/0
+crypto map To_ASA
+
+ip route 0.0.0.0 0.0.0.0 98.76.1.254

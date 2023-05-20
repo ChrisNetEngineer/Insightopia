@@ -1,0 +1,27 @@
+tunnel-group 98.76.1.1 type ipsec-l2l
+tunnel-group 98.76.1.1 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key cisco
+ ikev2 local-authentication pre-shared-key cisco
+
+crypto ikev2 policy 1
+ encryption aes-256
+ integrity sha
+ group 14
+ prf sha      
+ lifetime seconds 86400
+
+crypto ipsec ikev2 ipsec-proposal P1
+ protocol esp encryption aes-256
+ protocol esp integrity sha-1
+
+access-list ToRouter extended permit ip 192.168.100.0 255.255.255.0 192.168.1.0 255.255.255.0
+
+crypto ipsec security-association pmtu-aging infinite
+crypto map torouter 1 match address ToRouter
+crypto map torouter 1 set peer 98.76.1.1 
+crypto map torouter 1 set ikev2 ipsec-proposal P1
+
+crypto map torouter interface outside 
+crypto ikev2 enable outside
+
+route outside 0.0.0.0 0.0.0.0 98.76.5.254 1
