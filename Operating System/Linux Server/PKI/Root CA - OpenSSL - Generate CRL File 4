@@ -1,0 +1,43 @@
+openssl -in Root-CA.crt -out cacert.pem
+openssl ca -config config -gencrl -out Root-CA.crl
+
+#this is a CRL file
+
+#to revoke files do the following 
+#openssl ca -config config -revoke /etc/ssl/CA/newcerts/xxxx.pem
+#Example to revoke 1002.pem
+openssl ca -config config -revoke /etc/ssl/CA/newcerts/1002.pem
+
+to check the list
+cat index.txt
+
+#R means Revoke
+#V means Valid
+
+
+
+
+
+
+
+
+#Publish the CRL list online (via apache)
+
+
+aptitude install apache2
+
+cd /etc/ssl/CA
+openssl genrsa -out web.key
+
+openssl req -new -key web.key -out web.req
+# common name: *.internet.com
+# password: Skill39
+# others put .
+openssl ca -config config -extensions server_cert -days 3650 -notext -md sha512 \
+-in web.req -out web.crt
+
+
+cd /etc/apache2/sites-available/
+vi 000-default.conf
+
+#Ensure the ServerName is Inet.internet.com

@@ -1,0 +1,6 @@
+aptitude install openssh-server
+vi /etc/ssh/sshd_config 
+
+PermitRootLogin yes
+
+systemctl restart sshd

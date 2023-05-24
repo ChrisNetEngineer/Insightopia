@@ -1,0 +1,24 @@
+openssl genrsa 4096 > private/ca.key
+openssl pkcs8 -in private/ca.key -topk8 -out private/cakey.pem -v1 PBE-SHA1-3DES
+# Always store the key encrypted and don't forget your password
+rm private/root.key
+
+#generate the offline root CA certificate
+openssl req -config config -key private/cakey.pem -new -x509 -days 3650 -sha512 -extensions v3_ca \
+-out certs/Root-CA.crt
+
+openssl -in Root-CA.crt -out cacert.pem
+# password: Skill39
+#CN: SG
+#state: .
+#locality name: .
+#Organization Name: WSI
+#Organizational Unit name: .
+#Common name: Root-CA
+#emailAddress: .
+openssl -in Root-CA.crt -out cacert.pem
+openssl ca -config config -gencrl -out Root-CA.crl
+
+#trust your own certificate 
+cp certs/Root-CA.crt /usr/local/share/ca-certificates/
+update-ca-certificates -v

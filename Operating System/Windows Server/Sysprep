@@ -1,0 +1,8 @@
+Generalize the system (GUI)
+cd C:\windows\system32\sysprep
+sysprep /generalise /reboot /oobe 
+
+
+Generalize the system (GUI)
+cd C:\windows\system32\sysprep
+sysprep /generalise /reboot /oobe 

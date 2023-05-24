@@ -1,0 +1,151 @@
+#first import the debian cd's into the machine
+
+apt-cdrom add
+
+apt-get install aptitude
+aptitude install bind9 bind9-utils
+cd /etc/bind
+
+vim named.conf.local
+	zone "internet.com" IN {
+		type master;
+		file "/etc/bind/internet.com.lan";
+	};
+	
+	zone "20.10.200.in-addr.arpa" IN {
+		type master;
+		file "/etc/bind/20.10.200.db";
+	};
+	
+	zone "msftncsi.com" IN {
+		type master;
+		file "/etc/bind/msftncsi.com.lan";
+	};
+	
+	zone "255.107.131.in-addr.arpa" IN {
+		type master;
+		file "/etc/bind/255.107.131.db";
+	};
+	
+	zone "msftconnecttest.com" IN {
+		type master; 
+		file "/etc/bind/msftconnecttest.com.lan";
+	};
+	
+	zone "." {
+		type hint;
+		file "/etc/bind/root.hints"
+	};
+
+cp db.255 5.103.210.db
+cp db.0 internet.com.lan
+
+vi internet.com.lan
+		$TTL 86400
+		@   IN  SOA     inet.internet.com root.inet.internet.com. (
+				         1      ;Serial
+		        604800      ;Refresh
+		        86400       ;Retry
+		        2419200     ;Expire
+		        86400 )     ;Negative Cache TTL
+		;
+	@    IN    NS    inet.interent.com.
+	@    IN    A     200.10.20.129
+	
+	INET IN    A     210.103.5.129
+	ROOT-CA    IN    CNAME INET
+	www IN     CNAME INET 
+
+	REMOTE IN  A     210.103.5.210
+	
+	
+
+
+vim 20.10.200.db
+		$TTL 86400
+		@   IN  SOA     inet.internet.com root.inet.internet.com. (
+				         1      ;Serial
+		        604800      ;Refresh
+
+		        86400       ;Retry
+		        2419200     ;Expire
+		        86400 )     ;Negative Cache TTL
+		;
+	@    IN    NS    inet.internet.com.
+	@    IN    PTR   inet.internet.com.
+	
+	129   IN    PTR   inet.internet.com.
+	210   IN    PTR   remote.internet.com.
+	129   IN    PTR   www.connecttest.com.
+
+
+vim msftconnecttest.com.lan
+		$TTL 86400
+		@   IN  SOA     www.msftconnecttest.com. root.www.msftconnecttest.com. (
+				         1      ;Serial
+		        604800      ;Refresh
+		        86400       ;Retry
+		        2419200     ;Expire
+		        86400 )     ;Negative Cache TTL
+		;
+	@    IN    NS    www.msftconnecttest.com.
+	@    IN    A     200.10.20.129
+		
+	www    IN    A     200.10.20.129
+
+
+vim msftncsi.com.lan
+		$TTL 86400
+		@   IN  SOA     dns.msftncsi.com. root.dns.msftncsi.com. (
+				         1      ;Serial
+		        604800      ;Refresh
+		        86400       ;Retry
+		        2419200     ;Expire
+		        86400 )     ;Negative Cache TTL
+		;
+	@    IN    NS    dns.msftncsi.com.
+	@    IN    A     131.107.255.255
+		
+	dns    IN    A     131.107.255.255
+
+
+vim 255.107.131.db
+		$TTL 86400
+		@   IN  SOA     dns.msftncsi.com. root.dns.msftncsi.com. (
+				         1      ;Serial
+		        604800      ;Refresh
+		        86400       ;Retry
+		        2419200     ;Expire
+		        86400 )     ;Negative Cache TTL
+		;
+	@    IN    NS    dns.msftncsi.com.
+	255    IN    PTR   dns.msftncsi.com.
+
+
+vim named.conf.options
+	acl internal-network {
+		200.10.20.0/26;
+		200.10.20.64/26;
+		200.10.20.128/25;
+	};
+	
+			allow-query { any; localhost; internal-network;};
+			allow-transfer { localhost;};
+			allow-recursion { any; internal-network;};
+	    dnssec-validation no;
+	
+	};
+	
+nano /etc/network/interfaces
+	iface ens192 inet static
+			address 200.10.20.129/25
+			gateway 200.10.20.254
+			dns-nameservers 200.10.20.129
+			dns-search internet.com inet.internet.com
+
+nano /etc/resolv.conf
+	domain internet.com
+	search internet.com
+	nameserver 200.10.20.129
+
+systemctl restart bind9

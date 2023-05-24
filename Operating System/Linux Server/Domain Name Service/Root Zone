@@ -1,0 +1,27 @@
+		$TTL 86400
+		@   IN  SOA     . root.localhost. (
+				         1      ;Serial
+		        604800      ;Refresh
+
+		        86400       ;Retry
+		        2419200     ;Expire
+		        86400 )     ;Negative Cache TTL
+		;
+	@    IN    NS    inet.
+    inet.   IN  NS  127.0.0.1
+
+    com.    IN  NS  inet.com.
+    inet.com.   IN  NS  127.0.0.1
+
+    internet.com.   IN  NS  inet.internet.com.
+    inet.internet.com.  IN  NS  127.0.0.1
+
+    sg.    IN   NS  inet.sg.
+    inet.sg.    IN  NS  127.0.0.1
+
+    WSS2023.sg. IN  NS  dmzsrv.wss2023.sg.
+    dmzsrv.wss2023.sg.  IN  A   200.10.20.1
+
+    WSA2023.sg. IN  NS  wn-edge.wsa2023.sg.
+    wn-edge.wsa2023.sg. IN  A   200.10.20.65
+	
